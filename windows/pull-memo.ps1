@@ -35,7 +35,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $SshHost     = if ($env:MEMO_SSH_HOST)    { $env:MEMO_SSH_HOST }    else { 'projectx@100.99.13.95' }
-$RemotePath  = if ($env:MEMO_REMOTE_PATH) { $env:MEMO_REMOTE_PATH } else { "~/ProjectX/research engine/institutional memo's" }
+$RemotePath  = if ($env:MEMO_REMOTE_PATH) { $env:MEMO_REMOTE_PATH } else { '~/research-engine/institutional_memos' }
 $LocalCache  = if ($env:MEMO_LOCAL_CACHE) { $env:MEMO_LOCAL_CACHE } else { Join-Path $env:USERPROFILE 'Documents\Memos' }
 
 New-Item -ItemType Directory -Path $LocalCache -Force | Out-Null
