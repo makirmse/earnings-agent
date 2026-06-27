@@ -35,7 +35,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $SshHost     = if ($env:MEMO_SSH_HOST)    { $env:MEMO_SSH_HOST }    else { 'projectx@100.99.13.95' }
-$RemotePath  = if ($env:MEMO_REMOTE_PATH) { $env:MEMO_REMOTE_PATH } else { '~/research-engine/institutional_memos' }
+$RemotePath  = if ($env:MEMO_REMOTE_PATH) { $env:MEMO_REMOTE_PATH } else { '/Users/projectx/research-engine/institutional_memos' }
 $LocalCache  = if ($env:MEMO_LOCAL_CACHE) { $env:MEMO_LOCAL_CACHE } else { Join-Path $env:USERPROFILE 'Documents\Memos' }
 
 New-Item -ItemType Directory -Path $LocalCache -Force | Out-Null
@@ -109,12 +109,14 @@ Write-Host "Pulling: $picked" -ForegroundColor Green
 
 # Use sftp with a batch script. sftp sends the path literally via the SFTP
 # protocol, so we don't need any shell quoting on the remote side. sftp
-# accepts forward slashes for the local path on Windows.
-$localForSftp = $localFile -replace '\\','/'
+# does NOT expand ~ -- strip a leading ~/ so it falls back to the user's
+# home (sftp's default working directory).
+$remoteForSftp = if ($remoteFile.StartsWith('~/')) { $remoteFile.Substring(2) } else { $remoteFile }
+$localForSftp  = $localFile -replace '\\','/'
 $batch = New-TemporaryFile
 try {
     Set-Content -LiteralPath $batch -Encoding ASCII -Value @(
-        "get `"$remoteFile`" `"$localForSftp`""
+        "get `"$remoteForSftp`" `"$localForSftp`""
     )
     & sftp -q -b $batch $SshHost
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $localFile)) {

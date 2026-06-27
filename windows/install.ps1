@@ -16,7 +16,7 @@
 param(
     [string]$InstallDir = (Join-Path $env:LOCALAPPDATA 'Memo'),
     [string]$SshHost    = 'projectx@100.99.13.95',
-    [string]$RemotePath = '~/research-engine/institutional_memos'
+    [string]$RemotePath = '/Users/projectx/research-engine/institutional_memos'
 )
 
 $ErrorActionPreference = 'Stop'
