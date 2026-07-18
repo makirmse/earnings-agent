@@ -3,8 +3,9 @@
 # and starts a Claude Remote Control session in ~/research-engine.
 # Leave the Terminal window open while you work; closing it ends the session.
 
-# Open claude.ai/code a few seconds in, once the session has had time to appear.
-( sleep 8; open "https://claude.ai/code" ) &
+# Open claude.ai/code directly into the Mac Mini's environment so new
+# sessions run on the Mini, not in an Anthropic cloud sandbox.
+( sleep 8; open "https://claude.ai/code?environment=env_01VXLXC3ke9RL4pfpacUiNcv" ) &
 
 # -t gives us a real interactive screen; zsh -ic loads the Mini's normal
 # shell setup (so `claude` is on PATH), then we drop the API key so
